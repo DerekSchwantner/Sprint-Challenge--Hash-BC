@@ -26,6 +26,8 @@ def proof_of_work(last_proof):
     print("Searching for next proof")
     proof = 0
     #  TODO: Your code here
+    while valid_proof(last_proof, proof) is False:
+        proof += random.randint(1,101)
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
@@ -40,7 +42,19 @@ def valid_proof(last_hash, proof):
     """
 
     # TODO: Your code here!
-    pass
+    last_proof = f"{last_hash}".encode()
+    last_proof_hash = hashlib.sha256(last_proof).hexdigest()
+    next_proof = f"{proof}".encode()
+    next_proof_hash = hashlib.sha256(next_proof).hexdigest()
+
+    # grabbing the last 6 digits of the last proof to compare
+    last_proof_last6 = last_proof_hash[-6:]
+
+    # grabbing the first 6 digits of the next proof to compare
+    next_proof_first6 = next_proof_hash[:6]
+    
+    # return true if they match
+    return last_proof_last6 == next_proof_first6
 
 
 if __name__ == '__main__':
